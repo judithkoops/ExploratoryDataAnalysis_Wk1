@@ -1,0 +1,18 @@
+library(dplyr)
+setwd("C:/RstudioGithub/datasciencecoursera/ExploratoryDataAnalysis/Week 1")
+
+elek <- tbl_df(read.csv(file = "household_power_consumption.txt", sep = ";"))
+elek <- subset(elek, Date == c("1/2/2007", "2/2/2007"))
+elek$Date <- strptime(elek$Date, format = "%d/%m/%Y")
+elek$Time <- format(elek$Time, "%H:%M:%S")
+elek$datetime <- as.POSIXct(paste(elek$Date, elek$Time, format="%Y-%m-%d %H:%M:%S"))
+elek$Sub_metering_1 <- as.numeric(elek$Sub_metering_1)
+elek$Sub_metering_2 <- as.numeric(elek$Sub_metering_2)
+elek$Sub_metering_3 <- as.numeric(elek$Sub_metering_3)
+
+png(file = "plot3.png")
+plot(elek$datetime,elek$Sub_metering_1,type="l", ylab = "Energy sub metering", xlab = "")
+lines(elek$datetime,elek$Sub_metering_2,col="red")
+lines(elek$datetime,elek$Sub_metering_3,col="blue")
+legend("topright", lty = c(1,1,1), col = c("black", "red", "blue"), legend = c("Sub_metering_1", "Sub_metering_2", "Sub_metering_3"))
+dev.off()
